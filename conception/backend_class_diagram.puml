@@ -1,0 +1,161 @@
+@startuml backend_diagram
+title Class Diagram for the Backend
+
+class User {
+    User ID
+    Username
+    Email
+    Password
+    Dietary Preferences
+    Allergies
+    Rewards Points
+    +Sign Up()
+    +Log In()
+    +Update Profile()
+    +View Order History()
+    +Earn Rewards()
+}
+
+class Restaurant {
+    Restaurant ID
+    Name
+    Cuisine Type
+    Location
+    Menu Items
+    +View Menu()
+    +Search by Cuisine()
+    +Search by Location()
+    +Get Restaurant Details()
+}
+
+class MenuItem {
+    Item ID
+    Name
+    Description
+    Ingredients
+    Nutritional Information
+    Price
+    +View Details()
+    +Customize()
+    +Add to Cart()
+    +View Reviews()
+}
+
+class Order {
+    Order ID
+    User ID
+    Restaurant ID
+    Items
+    Total Price
+    Order Status
+    Order Date
+    +Place Order()
+    +Cancel Order()
+    +View Order Details()
+    +Track Order Status()
+}
+
+class CustomizationOption {
+    Option ID
+    Name
+    Description
+    Extra Charge
+    +View Options()
+    +Select Options()
+}
+
+class MealPlan {
+    Plan ID
+    Name
+    Description
+    Recommended Meals
+    Dietary Focus
+    +View Plan Details()
+    +Add Plan to Cart()
+    +Customize Plan()
+}
+
+class Review {
+    Review ID
+    User ID
+    Menu Item ID
+    Rating
+    Text
+    +Submit Review()
+    +View Reviews()
+}
+
+class Cart {
+    User ID
+    Items
+    Total Price
+    +Add Item()
+    +Remove Item()
+    +View Cart()
+    +Proceed to Checkout()
+}
+
+class RewardProgram {
+    Reward ID
+    User ID
+    Points Earned
+    Discount Offers
+    +Earn Points()
+    +Redeem Points()
+    +View Rewards()
+}
+
+class Community {
+    User ID
+    Posts
+    Comments
+    Likes
+    +Post()
+    +Comment()
+    +Like()
+    +View Community Posts()
+}
+
+class Notification {
+    User ID
+    Message
+    Timestamp
+    +Send Notification()
+    +View Notifications()
+}
+
+class SearchEngine {
+    +Search by Keyword()
+    +Filter by Dietary Preferences()
+    +Filter by Location()
+}
+
+User --> Order
+User --> Cart
+User --> RewardProgram
+User --> Community
+User --> Notification
+
+Restaurant --> MenuItem
+Restaurant --> Order
+
+MenuItem --> CustomizationOption
+MenuItem --> Review
+
+Order --> MenuItem
+
+MealPlan --> MenuItem
+
+Review --> MenuItem
+
+Cart --> MenuItem
+Cart --> MealPlan
+
+RewardProgram --> User
+
+Community --> User
+
+SearchEngine ..> Restaurant
+SearchEngine ..> MenuItem
+SearchEngine ..> MealPlan
+@enduml
