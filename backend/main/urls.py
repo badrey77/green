@@ -1,23 +1,32 @@
-"""
-URL configuration for backend project.
-
-The `urlpatterns` list routes URLs to views. For more information please see:
-    https://docs.djangoproject.com/en/4.2/topics/http/urls/
-Examples:
-Function views
-    1. Add an import:  from my_app import views
-    2. Add a URL to urlpatterns:  path('', views.home, name='home')
-Class-based views
-    1. Add an import:  from other_app.views import Home
-    2. Add a URL to urlpatterns:  path('', Home.as_view(), name='home')
-Including another URLconf
-    1. Import the include() function: from django.urls import include, path
-    2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
-"""
-from django.contrib import admin
 from django.urls import path, include
-from .views import Home
+from rest_framework.routers import DefaultRouter
+from .views import (
+    UserViewSet, IngredientViewSet, RestaurantViewSet, MenuViewSet, ModeViewSet,
+    DishBaseViewSet, DishViewSet, MenuItemViewSet, IngredientQuantityViewSet,
+    ProfileViewSet, AdminProfileViewSet, CustomerProfileViewSet, ManagerProfileViewSet,
+    OrderViewSet, TagViewSet, SocialAccountViewSet, OrderedDishViewSet
+)
+
+router = DefaultRouter()
+router.register(r'users', UserViewSet)
+router.register(r'ingredients', IngredientViewSet)
+router.register(r'restaurants', RestaurantViewSet)
+router.register(r'menus', MenuViewSet)
+router.register(r'modes', ModeViewSet)
+router.register(r'dishbases', DishBaseViewSet)
+router.register(r'dishes', DishViewSet)
+router.register(r'menuitems', MenuItemViewSet)
+router.register(r'ingredientquantities', IngredientQuantityViewSet)
+router.register(r'profiles', ProfileViewSet)
+router.register(r'adminprofiles', AdminProfileViewSet)
+router.register(r'customerprofiles', CustomerProfileViewSet)
+router.register(r'managerprofiles', ManagerProfileViewSet)
+router.register(r'orders', OrderViewSet)
+router.register(r'tags', TagViewSet)
+router.register(r'socialaccounts', SocialAccountViewSet)
+router.register(r'ordereddishes', OrderedDishViewSet)
 
 urlpatterns = [
-    path('', Home.as_view(), name='home'),
+    path('', include(router.urls)),
+    path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
 ]

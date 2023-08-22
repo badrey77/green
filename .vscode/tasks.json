@@ -1,0 +1,13 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"type": "Live Preview",
+			"workspacePath": "c:\\development\\2023\\projectgreen",
+			"problemMatcher": [
+				"$tsc"
+			],
+			"label": "Live Preview: Run Server"
+		}
+	]
+}
