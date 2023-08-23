@@ -11,8 +11,11 @@
 #         return render(request, template_name='./main/home.html', context={'form': form, 'title': 'Welcome\
 #         ! Can I help you ?'})
 #
-from django.contrib.auth.models import PermissionsMixin
+import requests
+from django.http import HttpResponse, JsonResponse
+from django.views import View
 from rest_framework import viewsets, permissions
+from rest_framework.utils import json
 
 from .models import User, Ingredient, Restaurant, Menu, Mode, DishBase, Dish, MenuItem, IngredientQuantity, Profile, \
     AdminProfile, CustomerProfile, ManagerProfile, Order, Tag, SocialAccount, OrderedDish
@@ -20,6 +23,32 @@ from .serializers import UserSerializer, IngredientSerializer, RestaurantSeriali
     DishBaseSerializer, DishSerializer, MenuItemSerializer, IngredientQuantitySerializer, ProfileSerializer, \
     AdminProfileSerializer, CustomerProfileSerializer, ManagerProfileSerializer, OrderSerializer, TagSerializer, \
     SocialAccountSerializer, OrderedDishSerializer
+
+
+class Search(View):
+    @staticmethod
+    def get(request):
+        params = {
+            #'nutrition-type': 'cooking',
+            #'category[0]': 'generic-foods',
+            #'health[0]': 'alcohol-free',
+        }
+        headers = {
+            'X-RapidAPI-Key': '5aaf062d7fmshdb5be57df4740b2p193729jsn5b260789ab0e',
+            'X-RapidAPI-Host': 'edamam-food-and-grocery-database.p.rapidapi.com'
+        }
+        if request.method == 'GET' and 'q' in request.GET:
+            params['ingr'] = request.GET.get('q')
+            response = requests\
+                .get('https://edamam-food-and-grocery-database.p.rapidapi.com/api/food-database/v2/parser',
+                     params=params, headers=headers)
+            data = response.json()
+            print(data['text'])
+            print(data['parsed'])
+        else:
+            data = {}
+
+        return JsonResponse(json.dumps(data['parsed']), safe=False)
 
 
 class UserViewSet(viewsets.ModelViewSet):

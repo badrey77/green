@@ -4,7 +4,7 @@ from .views import (
     UserViewSet, IngredientViewSet, RestaurantViewSet, MenuViewSet, ModeViewSet,
     DishBaseViewSet, DishViewSet, MenuItemViewSet, IngredientQuantityViewSet,
     ProfileViewSet, AdminProfileViewSet, CustomerProfileViewSet, ManagerProfileViewSet,
-    OrderViewSet, TagViewSet, SocialAccountViewSet, OrderedDishViewSet
+    OrderViewSet, TagViewSet, SocialAccountViewSet, OrderedDishViewSet, Search
 )
 
 router = DefaultRouter()
@@ -29,4 +29,5 @@ router.register(r'ordereddishes', OrderedDishViewSet)
 urlpatterns = [
     path('', include(router.urls)),
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
+    path('search', Search.as_view(), name='search-url')
 ]
