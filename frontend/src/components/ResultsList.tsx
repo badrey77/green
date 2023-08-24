@@ -1,28 +1,19 @@
 import { Flex, HStack, Image, List, ListItem, Text, UnorderedList } from "@chakra-ui/react";
+import SearchResultsItem from "./SearchResultsItem";
+import { FoodDataStruct } from "../utils/types";
 
-const ResultsList = (data) => {
 
-    const elements = JSON.parse(data.elements);
+const ResultsList = ({ foods }) => {
+
+    const elements: Array<FoodDataStruct> = foods;
     
     return (
         <List>
-            {elements.map(elem=>(
-                <ListItem key={JSON.stringify(elem.food.foodId)}>
-                    <HStack spacing={3}>
-                    <Image 
-                    width={'100px'} 
-                    height={'100px'} 
-                    src={elem.food.image} 
-                    alt={elem.food.label} />
-                    <Text>{elem.food.label}</Text>
-                    <UnorderedList>
-                        <ListItem><Text>`Cals: ${JSON.stringify(elem.food.nutrients.ENERC_KCAL)}`</Text></ListItem>
-                        <ListItem><Text>`Prots: ${JSON.stringify(elem.food.nutrients.PROCNT)}`</Text></ListItem>
-                        <ListItem><Text>`Fibs: ${JSON.stringify(elem.food.nutrients.FIBTG)}`</Text></ListItem>
-                    </UnorderedList>
-                    </HStack>
-                </ListItem>
-            ))}
+            <Flex>
+            { elements.map(elem=>(
+                <SearchResultsItem key={elem.food.foodId} { ... elem } />
+            )) }
+            </Flex>
         </List>
     )
     

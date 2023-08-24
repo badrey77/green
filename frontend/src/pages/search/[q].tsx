@@ -1,10 +1,10 @@
-import { Code, Container, Text } from "@chakra-ui/react";
-import { Hero } from "../../components/Hero";
+import { Box, Button, Code, Container, IconButton, Link, Text } from "@chakra-ui/react";
 import { Main } from '../../components/Main'
 import { useRouter } from "next/router";
 import axios from 'axios';
 import ResultsList from "../../components/ResultsList";
-import { useState } from "react";
+import { Banner } from "../../components/Banner";
+import { ArrowBackIcon, RepeatIcon } from "@chakra-ui/icons";
 
 
 
@@ -22,18 +22,33 @@ export async function getServerSideProps(context) {
 
 const Search = ({ results }) => {
 
-    const foods = results;
+    const elements = JSON.parse(results);
+    console.log(`Elements: ${elements}`);
+    
     const router = useRouter();
     return (
-    <Container height="100vh">
-        <Hero />
-        <Main>
-            <Text color="text">
+    <Box height="100vh">
+        <Banner />
+        <Main 
+        position={"relative"}
+        margin={"0 auto"}
+        padding={"10px"}
+        >
+            <Text
+             color="text">
                 Your query <Code>{router.query.q}</Code>
             </Text>
         </Main>
-        <ResultsList elements={ foods }/>
-    </Container>
+        <ResultsList foods={ elements } />
+        <Link
+          href="/"
+          display={"grid"}
+        >
+          <Button>
+            <ArrowBackIcon color="gray.600" />
+          </Button>
+        </Link>
+    </Box>
     )
     
 }
