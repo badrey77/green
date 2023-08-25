@@ -5,6 +5,7 @@ import {
   List,
   ListIcon,
   ListItem,
+  Stack, Box, Button
 } from '@chakra-ui/react'
 import { CheckCircleIcon, LinkIcon } from '@chakra-ui/icons'
 
@@ -18,6 +19,21 @@ import { SearchBar } from '../components/SearchBar'
 
 const Index = () => (
   <Container height="100vh">
+    <Stack>
+      <Box boxShadow={"base"} display={"flex"} background={"green.700"} w={"100vw"}>
+      <Stack padding={".5em"} w={"7em"} >
+        <Text fontFamily={"Copperplate, Papyrus, fantasy"} textColor={"white"}>M A K E I T</Text>
+        <Text fontFamily={"Copperplate, Papyrus, fantasy"} textColor={"white"}>M Y S E L F</Text>
+      </Stack>
+        <Box display={"flex"} w={"full"} justifyContent={"flex-end"} >
+          <Stack alignItems={"center"} spacing={"3"} direction={"row"} padding={3}>
+            <Button bg={"orange"} _hover={{ background: "orange.600", color: "white" }} textColor={"white"}>Home</Button>
+            <Button bg={"green.700"} _hover={{ background: "orange.600", color: "white" }} textColor={"white"}>About</Button>
+            <Button bg={"green.700"} _hover={{ background: "orange.600", color: "white" }} textColor={"white"}>Contact us</Button>
+          </Stack>
+        </Box>
+      </Box>
+    </Stack>
     <Hero />
     <Main>
       <Text color="text">
