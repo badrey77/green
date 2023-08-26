@@ -1,9 +1,9 @@
 import { Flex, HStack, Image, List, ListItem, Text, UnorderedList } from "@chakra-ui/react";
-import SearchResultsItem from "./SearchResultsItem";
+import NutrientsListItem from "./NutrientsListItem";
 import { FoodDataStruct } from "../utils/types";
 
 
-const ResultsList = ({ foods }) => {
+const NutrientsList = ({ foods }) => {
 
     const elements: Array<FoodDataStruct> = foods;
     
@@ -11,7 +11,7 @@ const ResultsList = ({ foods }) => {
         <List>
             <Flex>
             { elements.map(elem=>(
-                <SearchResultsItem key={elem.food.foodId} { ... elem } />
+                <NutrientsListItem key={elem.food.foodId} { ... elem } />
             )) }
             </Flex>
         </List>
@@ -19,4 +19,4 @@ const ResultsList = ({ foods }) => {
     
 }
 
-export default ResultsList;
+export default NutrientsList;

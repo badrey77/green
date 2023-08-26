@@ -12,3 +12,12 @@ export type FoodDataStruct = {
         }
     }
 };
+
+export type DishType = {
+    id: number,
+    label: string,
+    description: string,
+    img: string,
+    price: number,
+    ingredients: Array<string>
+}

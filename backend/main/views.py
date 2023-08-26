@@ -92,6 +92,14 @@ class DishViewSet(viewsets.ModelViewSet):
     serializer_class = DishSerializer
     permission_classes = [permissions.IsAuthenticated]
 
+    def get_queryset(self):
+        list_of_ingredients = self.request.query_params.get("ingredients", None)
+        if list_of_ingredients:
+            list2 = list(list_of_ingredients.lower().split(","))
+            qs = Dish.objects.filter(ingredients__label__in=list2)
+            return qs
+        return super().get_queryset()
+
 
 class MenuItemViewSet(viewsets.ModelViewSet):
     queryset = MenuItem.objects.all()

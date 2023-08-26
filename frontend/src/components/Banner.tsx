@@ -13,6 +13,7 @@ export const Banner = ({ title }: { title: string }) => (
     border={"5px double gray"}
     position={"relative"}
     margin={"0 auto"}
+    zIndex={100}
   >
     <Heading fontSize="7vw">{title}</Heading>
   </Flex>

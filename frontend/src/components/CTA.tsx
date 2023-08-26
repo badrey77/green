@@ -1,16 +1,16 @@
-import { Link as ChakraLink, Button } from '@chakra-ui/react'
+import { Link as ChakraLink, Button, Box } from '@chakra-ui/react'
 
 import { Container } from './Container'
 
 export const CTA = () => (
-  <Container
-    flexDirection="row"
+  <Box
     position="fixed"
     bottom={0}
     width="full"
-    maxWidth="3xl"
     py={3}
+    bgColor={"white"} 
   >
+    <Container bgColor={"white"} width={"full"} flexDirection={"row"} alignItems={"stretch"} justifyContent={"space-around"} flexFlow={"wrap"} >
     <Button
       as={ChakraLink}
       isExternal
@@ -19,8 +19,8 @@ export const CTA = () => (
       colorScheme="green"
       rounded="button"
       flexGrow={1}
+      width="48vw"
       mx={2}
-      width="full"
     >
       Where is my order ?
     </Button>
@@ -31,11 +31,12 @@ export const CTA = () => (
       variant="solid"
       colorScheme="green"
       rounded="button"
-      flexGrow={3}
+      flexGrow={1}
+      width="48vw"
       mx={2}
-      width="full"
     >
       Quick Meal !!!
     </Button>
-  </Container>
+    </Container>
+  </Box>
 )

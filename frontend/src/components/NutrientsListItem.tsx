@@ -1,10 +1,9 @@
-"use client";
 import { Heading, Image, List, ListItem, Stack } from "@chakra-ui/react";
 import NutrItem from "./NutrItem";
 import { FoodDataStruct } from "../utils/types";
 
 
-const SearchResultsItem = (data : FoodDataStruct) => (
+const NutrientsListItem = (data : FoodDataStruct) => (
     <Stack display={"contents"}
           spacing={2}
           flexDirection="row"
@@ -31,4 +30,4 @@ const SearchResultsItem = (data : FoodDataStruct) => (
         </Stack>
 );
 
-export default SearchResultsItem;
+export default NutrientsListItem;

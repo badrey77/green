@@ -3,8 +3,8 @@ import { getRandomItem } from "../utils/common";
 
 const NutrItem = ({ inkey, value }) => (
     <ListItem key={inkey}>
-      <span role="img" aria-label="dish">
-        {getRandomItem([
+      <span role="img" aria-label="dish">&#x2022;
+        {  /* {getRandomItem([
           "🌭",
           "🍔",
           "🍟",
@@ -21,7 +21,7 @@ const NutrItem = ({ inkey, value }) => (
           "🍜",
           "🍲",
           "🍛"
-        ])}
+        ])} */}
       </span>{" "}
       <strong>{ inkey }:{" "}</strong>
       { value }

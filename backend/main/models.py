@@ -33,7 +33,7 @@ class Restaurant(models.Model):
 class Menu(models.Model):
     label = CharField(max_length=1000)
     description = CharField(max_length=1000)
-    restaurant = ForeignKey(Restaurant, on_delete=CASCADE)
+    restaurant = ForeignKey(Restaurant, on_delete=CASCADE,related_name='menus')
     customizable = BooleanField(default=True)
 
     def __str__(self):
@@ -59,6 +59,8 @@ class DishBase(models.Model):
 class Dish(DishBase):
     label = CharField(max_length=1000)
     type = CharField(max_length=3, choices=DISH_TYPE)
+    img = URLField(null=True, blank=True)
+    price = FloatField(default=100.00, verbose_name='Price ($)')
 
     def __str__(self):
         return '{} ({})'.format(self.label, self.type)
@@ -68,7 +70,7 @@ class MenuItem(models.Model):
     label = CharField(max_length=1000)
     description = CharField(max_length=1000)
     dishes = ManyToManyField(Dish)
-    menu = ForeignKey(Menu, on_delete=CASCADE)
+    menu = ForeignKey(Menu, on_delete=CASCADE, related_name='menuitems')
     mode = ForeignKey(Mode, blank=True, null=True, on_delete=CASCADE)
 
     def __str__(self):
@@ -137,15 +139,18 @@ def create_user_profile(sender, instance, created, **kwargs):
 
 @receiver(post_save, sender=User)
 def save_user_profile(sender, instance, **kwargs):
-    if instance.profile:
-        if instance.profile.type != 'C' and isinstance(instance.profile, CustomerProfile):
-            tpe = instance.profile.type
-            instance.profile.delete()
-            if tpe == 'A':
-                AdminProfile.objects.create(user=instance, type='A')
-            elif tpe == 'M':
-                ManagerProfile.objects.create(user=instance, type='M')
+    try :
+        if instance.profile:
+            if instance.profile.type != 'C' and isinstance(instance.profile, CustomerProfile):
+                tpe = instance.profile.type
+                instance.profile.delete()
+                if tpe == 'A':
+                    AdminProfile.objects.create(user=instance, type='A')
+                elif tpe == 'M':
+                    ManagerProfile.objects.create(user=instance, type='M')
 
+    except Exception:
+        print("error !!!")
 
 class Order(models.Model):
     user = ForeignKey(User, related_name="orders", on_delete=CASCADE)

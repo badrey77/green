@@ -1,4 +1,6 @@
 from rest_framework import serializers
+from rest_framework.relations import StringRelatedField
+
 from .models import User, Ingredient, Restaurant, Menu, Mode, DishBase, Dish, MenuItem, IngredientQuantity, Profile, AdminProfile, CustomerProfile, ManagerProfile, Order, Tag, SocialAccount, OrderedDish
 
 class UserSerializer(serializers.HyperlinkedModelSerializer):
@@ -14,12 +16,8 @@ class IngredientSerializer(serializers.HyperlinkedModelSerializer):
 class RestaurantSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Restaurant
-        fields = '__all__'
+        fields = ('id', 'label', 'address', 'location', 'menus',)
 
-class MenuSerializer(serializers.HyperlinkedModelSerializer):
-    class Meta:
-        model = Menu
-        fields = '__all__'
 
 class ModeSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
@@ -31,20 +29,34 @@ class DishBaseSerializer(serializers.HyperlinkedModelSerializer):
         model = DishBase
         fields = '__all__'
 
+
+
 class DishSerializer(serializers.HyperlinkedModelSerializer):
+    ingredients = StringRelatedField(many=True)
     class Meta:
         model = Dish
-        fields = '__all__'
+        fields = ['id', 'label', 'description', 'img', 'price','ingredients']
+
 
 class MenuItemSerializer(serializers.HyperlinkedModelSerializer):
+    dishes = DishSerializer(many=True)
     class Meta:
         model = MenuItem
         fields = '__all__'
 
+
+class MenuSerializer(serializers.HyperlinkedModelSerializer):
+    menuitems = MenuItemSerializer(many=True, allow_null=True)
+    class Meta:
+        model = Menu
+        fields = ['id','label','description','restaurant','customizable','menuitems']
+
+
 class IngredientQuantitySerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = IngredientQuantity
-        fields = '__all__'
+        fields = ['id', 'ingredient', 'dish', 'quantity']
+
 
 class ProfileSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:

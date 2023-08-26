@@ -1,10 +1,68 @@
 from django.contrib import admin
-from django.contrib.admin import ModelAdmin, StackedInline
+from django.contrib.admin import ModelAdmin, StackedInline, TabularInline
 from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist
+from django.utils.safestring import mark_safe
 
-from main.models import Profile, CustomerProfile, AdminProfile, ManagerProfile
+from main.models import Profile, CustomerProfile, AdminProfile, ManagerProfile, Restaurant, Menu, MenuItem, Dish, \
+    Ingredient, IngredientQuantity, DishBase
 
+
+class MenuInline(TabularInline):
+    def goto(self,obj):
+        if obj is not None:
+            return mark_safe(f'<a href="/main/menus/{obj.pk}">Go to</a>')
+    model = Menu
+    extra = 0
+    readonly_fields = ['goto']
+
+
+@admin.register(Restaurant)
+class RestaurantConfig(ModelAdmin):
+    inlines = [MenuInline]
+
+
+class MenuItemInline(TabularInline):
+    model = MenuItem
+
+
+@admin.register(Menu)
+class MenuConfig(ModelAdmin):
+    inlines = [MenuItemInline]
+
+
+class IngredientInline(TabularInline):
+    model = IngredientQuantity
+    extra = 0
+    autocomplete_fields = ['ingredient']
+
+
+@admin.register(DishBase)
+class DishBaseConfig(ModelAdmin):
+    search_fields = ['description', 'ingredients']
+
+
+@admin.register(Dish)
+class DishConfig(ModelAdmin):
+    def image(self, obj):
+        if obj == None:
+            return
+        return mark_safe(f'<img src="{obj.img}" width="400px" height="400px" alt="Image here" />')
+
+    def thumb(self, obj):
+        if obj == None:
+            return
+        return mark_safe(f'<img src="{obj.img}" width="80px" height="80px" alt="Thumb here" />')
+
+    inlines = [IngredientInline]
+    readonly_fields = ['image', 'thumb']
+    list_display = ['label', 'type', 'thumb', 'price']
+
+
+
+@admin.register(Ingredient)
+class IngredientConfig(ModelAdmin):
+    search_fields = ['label']
 
 class ProfileInlineMixin(object):
     can_delete = False
