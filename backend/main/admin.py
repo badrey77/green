@@ -22,8 +22,20 @@ class RestaurantConfig(ModelAdmin):
     inlines = [MenuInline]
 
 
-class MenuItemInline(TabularInline):
+class MenuItemInline(StackedInline):
     model = MenuItem
+    extra = 1
+    filter_horizontal = ["dishes"]
+    fieldsets = [
+        (None, {
+        "classes":["collapse", "collapsed"],
+        "fields":[("label", "description"), "dishes", "mode"]
+        }),
+    ]
+
+    class Media:
+        js = ['/static/js/menuiteminline.js']
+
 
 
 @admin.register(Menu)

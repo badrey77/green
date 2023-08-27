@@ -4,7 +4,7 @@ import { FoodDataStruct } from "../utils/types";
 
 
 const NutrientsListItem = (data : FoodDataStruct) => (
-    <Stack display={"contents"}
+      <Stack display={"contents"}
           spacing={2}
           flexDirection="row"
           justifyContent="flex-start"
@@ -17,14 +17,12 @@ const NutrientsListItem = (data : FoodDataStruct) => (
             height="100px"
             width="100px"
             src={ data.food.image }
-            mr={30}
             borderRadius={100}
-            alignSelf={"center"}
           />
           <Stack spacing={2}>
-            <Heading width={"200px"} as="h6">{ data.food.label}</Heading>
+            <Heading as="h6">{ data.food.label}</Heading>
             <List>
-                { Object.entries(data.food.nutrients).map(([k,v])=>(<NutrItem inkey={k} value={v} />)) }
+                { Object.entries(data.food.nutrients).map(([k,v])=>(<NutrItem key={k} inkey={k} value={v} />)) }
             </List>
           </Stack>
         </Stack>

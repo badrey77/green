@@ -1,12 +1,12 @@
-import { Box, Button, Code, Collapse, Container, Flex, IconButton, Link, Text, border, useDisclosure } from "@chakra-ui/react";
+import { Button, Code, Container, Link, Text, useDisclosure } from "@chakra-ui/react";
 import { Main } from '../../components/Main'
 import { useRouter } from "next/router";
 import axios from 'axios';
-import NutrientsList from "../../components/NutrientsList";
-import { ArrowBackIcon, EditIcon, RepeatIcon } from "@chakra-ui/icons";
-import MainBanner from "../../components/MainBanner";
+import { EditIcon } from "@chakra-ui/icons";
 import { get_ingredients_from } from "../../utils/common";
 import Dishes from "../../components/Dishes";
+import React from "react";
+import NutrientsInfo from "../../components/NutrientsInfo";
 
 
 
@@ -42,7 +42,8 @@ const Search = ({ results, proposals }) => {
 
     const elements = JSON.parse(results);
     const dishes = JSON.parse(JSON.stringify(proposals.results));
-    const { isOpen, onToggle } = useDisclosure()  
+    const { isOpen, onOpen, onClose } = useDisclosure()
+    const btnRef = React.useRef() 
     const router = useRouter();
 
     return (
@@ -67,24 +68,14 @@ const Search = ({ results, proposals }) => {
             </Text>
           </Container>
           <Container>
-            <Button onClick={onToggle}>See Nutrients ({elements.length}){" >"}</Button>
-            <Collapse in={isOpen} animateOpacity>
-              <Box
-                p='40px'
-                color='white'
-                mt='4'
-                bg='teal.500'
-                rounded='md'
-                shadow='md'
-              >
-                <NutrientsList foods={ elements } />
-              </Box>
-            </Collapse>
+            <Button ref={btnRef} onClick={onOpen}>See Nutrients ({elements.length}){" >"}</Button>
+            <NutrientsInfo isOpen={isOpen} onClose={onClose} btnRef={btnRef} elements={elements} />
           </Container> 
-          <Container>
-          <Box>
+          <Container maxW={"2xl"}>
             <Dishes dishes={dishes} />
-          </Box>
+          </Container>
+          <Container  mb={20} >
+            <Link href="#">Return to top</Link>
           </Container>
        </Main>
     )

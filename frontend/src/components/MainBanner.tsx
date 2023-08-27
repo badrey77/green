@@ -3,7 +3,8 @@ import { Box, Button, Link, Stack, Text } from "@chakra-ui/react";
 const MainBanner = () => (
     <Stack
         position={"fixed"}
-        top={0}    
+        top={0} 
+        zIndex={"100"}   
     >
         <Box boxShadow={"base"} display={"flex"} background={"green.700"} w={"100vw"}>
         <Link

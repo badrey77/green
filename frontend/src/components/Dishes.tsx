@@ -3,10 +3,12 @@ import { DishType } from "../utils/types";
 
 const Dishes = ({ dishes }) => {
     
+    console.log(dishes);
+    
     return (
-    <Flex>
+      <>
         { dishes.map((dish: DishType)=>(
-            <Card minW={"xs"} maxW='xs'>
+            <Card key={dish.id} maxW='2xl'>
             <CardBody>
               <Image
                 src={dish.img}
@@ -36,7 +38,7 @@ const Dishes = ({ dishes }) => {
             </CardFooter>
           </Card>
         ))}
-    </Flex>
+    </>
 )}
 
 export default Dishes

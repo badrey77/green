@@ -12,6 +12,7 @@
 #         ! Can I help you ?'})
 #
 import requests
+from django.db.models.functions import Lower
 from django.http import HttpResponse, JsonResponse
 from django.views import View
 from rest_framework import viewsets, permissions
@@ -96,7 +97,8 @@ class DishViewSet(viewsets.ModelViewSet):
         list_of_ingredients = self.request.query_params.get("ingredients", None)
         if list_of_ingredients:
             list2 = list(list_of_ingredients.lower().split(","))
-            qs = Dish.objects.filter(ingredients__label__in=list2)
+            qs1 = IngredientQuantity.objects.annotate(lower_label=Lower('ingredient__label')).filter(lower_label__in=list2)
+            qs = Dish.objects.filter(pk__in=qs1.all().values_list('dish_id'))
             return qs
         return super().get_queryset()
 
