@@ -1,3 +1,4 @@
+from django.contrib.auth import get_user
 from django.contrib.auth.models import User
 from django.db import models
 from django.db.models import CharField, ManyToManyField, ForeignKey, FloatField, CASCADE, BooleanField, OneToOneField, \
@@ -30,6 +31,11 @@ class Restaurant(models.Model):
         return '{} at {}'.format(self.label, self.address)
 
 
+class RestaurantofMan(Restaurant):
+    class Meta:
+        proxy = True
+
+
 class Menu(models.Model):
     label = CharField(max_length=1000)
     description = CharField(max_length=1000)
@@ -38,6 +44,18 @@ class Menu(models.Model):
 
     def __str__(self):
         return self.label
+
+
+class MenuofRestaurantManager(models.Manager):
+    def get_queryset(self):
+        return super().get_queryset()
+
+
+class MenuofRestaurant(Menu):
+    objects = MenuofRestaurantManager()
+
+    class Meta:
+        proxy = True
 
 
 class Mode(models.Model):

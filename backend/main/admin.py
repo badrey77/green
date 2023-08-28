@@ -5,13 +5,13 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.utils.safestring import mark_safe
 
 from main.models import Profile, CustomerProfile, AdminProfile, ManagerProfile, Restaurant, Menu, MenuItem, Dish, \
-    Ingredient, IngredientQuantity, DishBase
+    Ingredient, IngredientQuantity, DishBase, MenuofRestaurant, RestaurantofMan
 
 
 class MenuInline(TabularInline):
     def goto(self,obj):
         if obj is not None:
-            return mark_safe(f'<a href="/main/menus/{obj.pk}">Go to</a>')
+            return mark_safe(f'<a href="/admin/main/menu/{obj.pk}">Go to</a>')
     model = Menu
     extra = 0
     readonly_fields = ['goto']
@@ -20,6 +20,18 @@ class MenuInline(TabularInline):
 @admin.register(Restaurant)
 class RestaurantConfig(ModelAdmin):
     inlines = [MenuInline]
+
+
+@admin.register(RestaurantofMan)
+class RestaurantofManConfig(ModelAdmin):
+    inlines = [MenuInline]
+
+    def get_queryset(self, request):
+        current_user = request.user
+        my_restaurant = Restaurant.objects.filter(managerprofile__user=current_user).first()
+        qs = super().get_queryset(request).filter(id=my_restaurant.id)
+        return qs
+
 
 
 class MenuItemInline(StackedInline):
@@ -37,10 +49,24 @@ class MenuItemInline(StackedInline):
         js = ['/static/js/menuiteminline.js']
 
 
-
 @admin.register(Menu)
 class MenuConfig(ModelAdmin):
+    list_filter = ['restaurant']
     inlines = [MenuItemInline]
+    list_display = ['label', 'restaurant', 'customizable']
+
+
+@admin.register(MenuofRestaurant)
+class MenuConfig(ModelAdmin):
+    list_filter = ['restaurant']
+    inlines = [MenuItemInline]
+    list_display = ['label', 'restaurant', 'customizable']
+
+    def get_queryset(self, request):
+        current_user = request.user
+        my_restaurant = Restaurant.objects.filter(managerprofile__user=current_user).first()
+        qs = super().get_queryset(request).filter(restaurant=my_restaurant)
+        return qs
 
 
 class IngredientInline(TabularInline):
