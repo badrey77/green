@@ -2,7 +2,7 @@ from django.contrib.auth import get_user
 from django.contrib.auth.models import User
 from django.db import models
 from django.db.models import CharField, ManyToManyField, ForeignKey, FloatField, CASCADE, BooleanField, OneToOneField, \
-    IntegerField, URLField
+    IntegerField, URLField, JSONField
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 
@@ -17,9 +17,13 @@ DISH_TYPE = (
 
 class Ingredient(models.Model):
     label = CharField(max_length=1000)
+    more_info = JSONField(default={}, blank=True, null=True)
 
     def __str__(self):
-        return self.label
+        if self.more_info != {}:
+            return f'{self.label} ({str(self.more_info)})'
+        return f'{self.label}'
+
 
 
 class Restaurant(models.Model):
@@ -79,9 +83,15 @@ class Dish(DishBase):
     type = CharField(max_length=3, choices=DISH_TYPE)
     img = URLField(null=True, blank=True)
     price = FloatField(default=100.00, verbose_name='Price ($)')
+    restaurant = ForeignKey(Restaurant, on_delete=CASCADE,related_name='dishes')
 
     def __str__(self):
         return '{} ({})'.format(self.label, self.type)
+
+
+class DishofMan(Dish):
+    class Meta:
+        proxy = True
 
 
 class MenuItem(models.Model):

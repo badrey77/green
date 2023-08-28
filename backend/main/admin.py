@@ -4,8 +4,9 @@ from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist
 from django.utils.safestring import mark_safe
 
+from main.forms import DishofManForm
 from main.models import Profile, CustomerProfile, AdminProfile, ManagerProfile, Restaurant, Menu, MenuItem, Dish, \
-    Ingredient, IngredientQuantity, DishBase, MenuofRestaurant, RestaurantofMan
+    Ingredient, IngredientQuantity, DishBase, MenuofRestaurant, RestaurantofMan, DishofMan
 
 
 class MenuInline(TabularInline):
@@ -31,7 +32,6 @@ class RestaurantofManConfig(ModelAdmin):
         my_restaurant = Restaurant.objects.filter(managerprofile__user=current_user).first()
         qs = super().get_queryset(request).filter(id=my_restaurant.id)
         return qs
-
 
 
 class MenuItemInline(StackedInline):
@@ -97,10 +97,38 @@ class DishConfig(ModelAdmin):
     list_display = ['label', 'type', 'thumb', 'price']
 
 
+@admin.register(DishofMan)
+class DishofManConfig(ModelAdmin):
+    def get_queryset(self, request):
+        current_user = request.user
+        my_restaurant = Restaurant.objects.filter(managerprofile__user=current_user).first()
+        qs = super().get_queryset(request).filter(restaurant=my_restaurant)
+        return qs
+
+    def thumb(self, obj):
+        if obj == None:
+            return
+        return mark_safe(f'<img src="{obj.img}" width="80px" height="80px" alt="Thumb here" />')
+
+    inlines = [IngredientInline]
+    readonly_fields = ['thumb']
+    list_display = ['label', 'type', 'thumb', 'price']
+    form = DishofManForm
+
+
 
 @admin.register(Ingredient)
 class IngredientConfig(ModelAdmin):
+    def get_more_info(self, obj):
+        if obj != None:
+            return  mark_safe('<input id="get_more_info_btn" type="button" value="Get more info" />')
+        return ''
+    readonly_fields = ['get_more_info']
     search_fields = ['label']
+
+    class Media:
+        js = ['js/get_more_info.js']
+
 
 class ProfileInlineMixin(object):
     can_delete = False
